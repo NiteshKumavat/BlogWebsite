@@ -6,7 +6,7 @@ const blogSchema = new mongoose.Schema(
             type: String,
             required: true,
             trim: true,
-            maxlength: 200
+            maxlength: [200, "Title cannot exceed 200 characters"]
         },
 
         slug: {
@@ -24,7 +24,8 @@ const blogSchema = new mongoose.Schema(
 
         excerpt: {
             type: String,
-            maxlength: 300
+            maxlength: [300, "Excerpt cannot exceed 300 characters"],
+            trim: true
         },
 
         author: {
@@ -34,13 +35,14 @@ const blogSchema = new mongoose.Schema(
         },
 
         coverImage: {
-            type: String
+            type: String,
+            trim: true
         },
 
         category: {
-            type: String,
-            required: true,
-            trim: true
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Category",
+            required: true
         },
 
         tags: [
@@ -62,31 +64,6 @@ const blogSchema = new mongoose.Schema(
             default: 0
         },
 
-        likes: {
-            type: Number,
-            default: 0
-        },
-
-        comments: [
-            {
-                user: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "User"
-                },
-
-                text: {
-                    type: String,
-                    required: true,
-                    trim: true
-                },
-
-                createdAt: {
-                    type: Date,
-                    default: Date.now
-                }
-            }
-        ],
-
         publishedAt: {
             type: Date
         }
@@ -96,5 +73,6 @@ const blogSchema = new mongoose.Schema(
     }
 );
 
-const Blog = new mongoose.model("Blog", blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
+
 export default Blog;
